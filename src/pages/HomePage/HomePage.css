@@ -1,0 +1,12 @@
+.input-container{
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+.input-metric{
+    width: 55px;
+}
+.visualization-container{
+    display: flex;
+    flex-wrap: wrap;
+}
