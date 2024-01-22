@@ -36,8 +36,9 @@ const HomePage = () => {
   
   const convertVolume = () => {
     var convertedVolume = 0
+    var roundedVolume = 0
+    var percentLeftover = 0
     var bottleVolume = standardizedVolume / 500
-    var roundedVolume
 
     if(bottleVolume >= 606){
       convertedVolume = Math.round((bottleVolume / 606)*100)/100
@@ -50,7 +51,7 @@ const HomePage = () => {
     else {
       convertedVolume = bottleVolume
       roundedVolume = Math.trunc(bottleVolume)
-      console.log("dis", Math.round((bottleVolume-roundedVolume)*100))
+      percentLeftover = Math.round((bottleVolume-roundedVolume)*100)
       setVisualization(roundedVolume)
       setOutputVolumeTitle("bottles")
     }
