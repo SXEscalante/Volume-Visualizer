@@ -4,7 +4,6 @@ import useAuth from "../../hooks/useAuth";
 
 import "./HomePage.css"
 
-import axios from "axios";
 import Bottle from "../../components/Bottle/Bottle";
 
 const HomePage = () => {
@@ -25,8 +24,17 @@ const HomePage = () => {
       case "liter":
         setStandardizedVolume(volume*2000)
         break;
+      case "tsp":
+        setStandardizedVolume(volume*4.93)
+        break;
+      case "tbsp":
+        setStandardizedVolume(volume*14.79)
+        break;
       case "ounce":
         setStandardizedVolume(volume*29.57)
+        break;
+      case "cup":
+        setStandardizedVolume(volume*236.59)
         break;
       case "gallon":
         setStandardizedVolume(volume*3785)  
@@ -38,22 +46,28 @@ const HomePage = () => {
     var convertedVolume = 0
     var roundedVolume = 0
     var percentLeftover = 0
-    var bottleVolume = standardizedVolume / 500
+    const shotGlassVolume = 45
+    const bottleVolume = 500
 
-    if(bottleVolume >= 606){
-      convertedVolume = Math.round((bottleVolume / 606)*100)/100
-      setOutputVolumeTitle("bathtubs")
-    }
-    else if(bottleVolume == 1){
-      convertedVolume = bottleVolume
+    
+    if(standardizedVolume == bottleVolume){
+      convertedVolume = (standardizedVolume/500)
       setOutputVolumeTitle("bottle")
     }
-    else {
-      convertedVolume = bottleVolume
-      roundedVolume = Math.trunc(bottleVolume)
-      percentLeftover = Math.round((bottleVolume-roundedVolume)*100)
+    else if(standardizedVolume > bottleVolume){
+      convertedVolume = standardizedVolume/bottleVolume
+      roundedVolume = Math.trunc(convertedVolume)
+      percentLeftover = Math.round((convertedVolume-roundedVolume)*100)
       setVisualization(roundedVolume)
       setOutputVolumeTitle("bottles")
+    }
+    else if(standardizedVolume >= (bottleVolume)*606){
+      convertedVolume = Math.round(((standardizedVolume/bottleVolume)/606)*100)/100
+      setOutputVolumeTitle("bathtubs")
+    }
+    else{
+      convertedVolume = Math.round((standardizedVolume/shotGlassVolume)*100)/100
+      setOutputVolumeTitle("shot glasses")
     }
     setOutputVolume(convertedVolume)
   }
@@ -74,7 +88,10 @@ const HomePage = () => {
             <select className="input-metric" name="volume" id="volume" onChange={(e) => setInputMetric(e.target.value)}>
               <option value="ml">mls</option>
               <option value="liter">liters</option>
+              <option value="tsp">tsp</option>
+              <option value="tbsp">tbps</option>
               <option value="ounce">fl oz</option>
+              <option value="cup">cups</option>
               <option value="gallon">gal</option>
             </select>
           </div>
