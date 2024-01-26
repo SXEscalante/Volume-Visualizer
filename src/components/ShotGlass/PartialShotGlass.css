@@ -1,0 +1,11 @@
+.shot-glass-container{
+
+}
+.shot-glass{
+    position: absolute;
+    height: 150px;
+}
+.shot-glass-fluid{
+    height: 115px;
+    clip-path: inset(30% 0% 0% 0%);
+} 

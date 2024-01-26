@@ -7,6 +7,7 @@ import "./HomePage.css"
 import Bottle from "../../components/Bottle/Bottle";
 import ShotGlass from "../../components/ShotGlass/ShotGlass";
 import Bathtub from "../../components/Bathtub/Bathtub";
+import PartialShotGlass from "../../components/ShotGlass/PartialShotGlass";
 
 const HomePage = () => {
   const [user, token] = useAuth();
@@ -17,6 +18,7 @@ const HomePage = () => {
   const [outputVolumeTitle, setOutputVolumeTitle] = useState("");
   const [visualization, setVisualization] = useState([]);
   const [visualizationCount, setVisualizationCount] = useState(0);
+  const [percentageVisualization, setPercentageVisualization] = useState(0);
 
   const standardizeVolume = () => {
     var volume = inputVolume
@@ -75,14 +77,18 @@ const HomePage = () => {
     else{
       convertedVolume = Math.round((standardizedVolume/shotGlassVolume)*100)/100
       roundedVolume = Math.trunc(convertedVolume)
+      percentLeftover = Math.round((convertedVolume-roundedVolume)*100)
       setVisualizationCount(roundedVolume)
       setOutputVolumeTitle("shot glasses")
     }
+    console.log("%", percentLeftover)
+    setPercentageVisualization(percentLeftover)
     setOutputVolume(convertedVolume)
   }
 
   const setVisualizationElement = () => {
     let visualizationElement = []
+    let visualizationOfPercentage
     switch(outputVolumeTitle){
       case "bathtubs":
         visualizationElement = Array.from(Array(visualizationCount)).map((_, index) => <Bathtub key={index}/>)
@@ -93,6 +99,9 @@ const HomePage = () => {
         break;
       case "shot glasses":
         visualizationElement = Array.from(Array(visualizationCount)).map((_, index) => <ShotGlass key={index}/>)
+        visualizationOfPercentage = <PartialShotGlass percent={percentageVisualization}/>
+        console.log(percentageVisualization)
+        visualizationElement.push(visualizationOfPercentage)
         break;
       }
     setVisualization(visualizationElement)
@@ -108,7 +117,7 @@ const HomePage = () => {
 
   useEffect(() => {
     setVisualizationElement()
-  }, [visualizationCount]);
+  }, [visualizationCount, percentageVisualization]);
 
   return (
     <div>
