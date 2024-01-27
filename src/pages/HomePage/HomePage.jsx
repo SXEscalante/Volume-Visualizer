@@ -8,6 +8,7 @@ import Bottle from "../../components/Bottle/Bottle";
 import ShotGlass from "../../components/ShotGlass/ShotGlass";
 import Bathtub from "../../components/Bathtub/Bathtub";
 import PartialShotGlass from "../../components/ShotGlass/PartialShotGlass";
+import PartialBottle from "../../components/Bottle/PartialBottle";
 
 const HomePage = () => {
   const [user, token] = useAuth();
@@ -68,11 +69,16 @@ const HomePage = () => {
       setOutputVolumeTitle("bottle")
     }
     else if(standardizedVolume > bottleVolume){
-      convertedVolume = standardizedVolume/bottleVolume
+      convertedVolume = Math.round((standardizedVolume/bottleVolume)*100)/100
       roundedVolume = Math.trunc(convertedVolume)
       percentLeftover = Math.round((convertedVolume-roundedVolume)*100)
       setVisualizationCount(roundedVolume)
       setOutputVolumeTitle("bottles")
+    }
+    else if (standardizedVolume == shotGlassVolume){
+      convertedVolume = standardizedVolume/shotGlassVolume
+      setVisualizationCount(convertedVolume)
+      setOutputVolumeTitle("shot glass")
     }
     else{
       convertedVolume = Math.round((standardizedVolume/shotGlassVolume)*100)/100
@@ -81,7 +87,6 @@ const HomePage = () => {
       setVisualizationCount(roundedVolume)
       setOutputVolumeTitle("shot glasses")
     }
-    console.log("%", percentLeftover)
     setPercentageVisualization(percentLeftover)
     setOutputVolume(convertedVolume)
   }
@@ -96,11 +101,17 @@ const HomePage = () => {
       case "bottle":
       case "bottles":
         visualizationElement = Array.from(Array(visualizationCount)).map((_, index) => <Bottle key={index}/>)
+        if(percentageVisualization != 0){
+          visualizationOfPercentage = <PartialBottle percent={percentageVisualization}/>
+        }
+        visualizationElement.push(visualizationOfPercentage)
         break;
+      case "shot glass":
       case "shot glasses":
         visualizationElement = Array.from(Array(visualizationCount)).map((_, index) => <ShotGlass key={index}/>)
-        visualizationOfPercentage = <PartialShotGlass percent={percentageVisualization}/>
-        console.log(percentageVisualization)
+        if(percentageVisualization != 0){
+          visualizationOfPercentage = <PartialShotGlass percent={percentageVisualization}/>
+        }
         visualizationElement.push(visualizationOfPercentage)
         break;
       }
