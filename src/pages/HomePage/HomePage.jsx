@@ -13,6 +13,7 @@ import PartialBottle from "../../components/Bottle/PartialBottle";
 const HomePage = () => {
   const [user, token] = useAuth();
   const [inputMetric, setInputMetric] = useState("ml");
+  const [outputMetric, setOutputMetric] = useState("default");
   const [inputVolume, setInputVolume] = useState(0);
   const [standardizedVolume, setStandardizedVolume] = useState(0);
   const [outputVolume, setOutputVolume] = useState(0);
@@ -56,36 +57,76 @@ const HomePage = () => {
     const bottleVolume = 500
     const tubVolume = 303000
     
-    if(standardizedVolume >= tubVolume){
-      convertedVolume = Math.round((standardizedVolume/tubVolume)*100)/100
-      roundedVolume = Math.trunc(convertedVolume)
-      setVisualizationCount(roundedVolume)
-      setOutputVolumeTitle("bathtubs")
+    if(outputMetric == "default"){
+
+      if(standardizedVolume >= tubVolume){
+        convertedVolume = Math.round((standardizedVolume/tubVolume)*100)/100
+        roundedVolume = Math.trunc(convertedVolume)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("bathtubs")
+      }
+      else if(standardizedVolume == bottleVolume){
+        convertedVolume = (standardizedVolume/500)
+        roundedVolume = Math.trunc(convertedVolume)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("bottle")
+      }
+      else if(standardizedVolume > bottleVolume){
+        convertedVolume = Math.round((standardizedVolume/bottleVolume)*100)/100
+        roundedVolume = Math.trunc(convertedVolume)
+        percentLeftover = Math.round((convertedVolume-roundedVolume)*100)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("bottles")
+      }
+      else if (standardizedVolume == shotGlassVolume){
+        convertedVolume = standardizedVolume/shotGlassVolume
+        setVisualizationCount(convertedVolume)
+        setOutputVolumeTitle("shot glass")
+      }
+      else{
+        convertedVolume = Math.round((standardizedVolume/shotGlassVolume)*100)/100
+        roundedVolume = Math.trunc(convertedVolume)
+        percentLeftover = Math.round((convertedVolume-roundedVolume)*100)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("shot glasses")
+      }
     }
-    else if(standardizedVolume == bottleVolume){
-      convertedVolume = (standardizedVolume/500)
-      roundedVolume = Math.trunc(convertedVolume)
-      setVisualizationCount(roundedVolume)
-      setOutputVolumeTitle("bottle")
+    else if(outputMetric == "shotGlasses"){
+      if (standardizedVolume == shotGlassVolume){
+        convertedVolume = standardizedVolume/shotGlassVolume
+        setVisualizationCount(convertedVolume)
+        setOutputVolumeTitle("shot glass")
+      }
+      else{
+        convertedVolume = Math.round((standardizedVolume/shotGlassVolume)*100)/100
+        roundedVolume = Math.trunc(convertedVolume)
+        percentLeftover = Math.round((convertedVolume-roundedVolume)*100)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("shot glasses")
+      }
     }
-    else if(standardizedVolume > bottleVolume){
-      convertedVolume = Math.round((standardizedVolume/bottleVolume)*100)/100
-      roundedVolume = Math.trunc(convertedVolume)
-      percentLeftover = Math.round((convertedVolume-roundedVolume)*100)
-      setVisualizationCount(roundedVolume)
-      setOutputVolumeTitle("bottles")
+    else if(outputMetric == "waterBottles"){
+      if(standardizedVolume == bottleVolume){
+        convertedVolume = (standardizedVolume/500)
+        roundedVolume = Math.trunc(convertedVolume)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("bottle")
+      }
+      else{
+        convertedVolume = Math.round((standardizedVolume/bottleVolume)*100)/100
+        roundedVolume = Math.trunc(convertedVolume)
+        percentLeftover = Math.round((convertedVolume-roundedVolume)*100)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("bottles")
+      }
     }
-    else if (standardizedVolume == shotGlassVolume){
-      convertedVolume = standardizedVolume/shotGlassVolume
-      setVisualizationCount(convertedVolume)
-      setOutputVolumeTitle("shot glass")
-    }
-    else{
-      convertedVolume = Math.round((standardizedVolume/shotGlassVolume)*100)/100
-      roundedVolume = Math.trunc(convertedVolume)
-      percentLeftover = Math.round((convertedVolume-roundedVolume)*100)
-      setVisualizationCount(roundedVolume)
-      setOutputVolumeTitle("shot glasses")
+    else if(outputMetric == "bathtubs"){
+      if(standardizedVolume >= tubVolume){
+        convertedVolume = Math.round((standardizedVolume/tubVolume)*100)/100
+        roundedVolume = Math.trunc(convertedVolume)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("bathtubs")
+      }
     }
     setPercentageVisualization(percentLeftover)
     setOutputVolume(convertedVolume)
@@ -120,7 +161,7 @@ const HomePage = () => {
 
   useEffect(() => {
     convertVolume()
-  }, [standardizedVolume]);
+  }, [standardizedVolume, outputMetric]);
 
   useEffect(() => {
     standardizeVolume()
@@ -146,6 +187,12 @@ const HomePage = () => {
             </select>
           </div>
         <p>{outputVolume || 0} {outputVolumeTitle}</p>
+        <select className="input-metric" name="volume" id="volume" onChange={(e) => setOutputMetric(e.target.value)}>
+              <option value="default">Default</option>
+              <option value="shotGlasses">Shot Glasses</option>
+              <option value="waterBottles">Water Bottles</option>
+              <option value="bathtubs">Bathtubs</option>
+            </select>
       </div>
       <div className="visualization-container">
         {visualization}
