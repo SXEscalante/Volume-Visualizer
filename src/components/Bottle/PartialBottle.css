@@ -1,9 +1,9 @@
 .partial-bottle{
     position: absolute;
-    height: 150px;
+    height: 250px;
     z-index: 2;
 
 }
 .bottle-fluid{
-    height: 150px;
+    height: 250px;
 }

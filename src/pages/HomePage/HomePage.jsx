@@ -187,7 +187,7 @@ const HomePage = () => {
             </select>
           </div>
         <p>{outputVolume || 0} {outputVolumeTitle}</p>
-        <select className="input-metric" name="volume" id="volume" onChange={(e) => setOutputMetric(e.target.value)}>
+        <select className="outputs-metric" name="volume" id="volume" onChange={(e) => setOutputMetric(e.target.value)}>
               <option value="default">Default</option>
               <option value="shotGlasses">Shot Glasses</option>
               <option value="waterBottles">Water Bottles</option>
