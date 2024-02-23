@@ -2,8 +2,15 @@
     position: absolute;
     height: 250px;
     z-index: 2;
-
+}
+.small-partial-bottle{
+    position: absolute;
+    height: 150px;
+    z-index: 2;
 }
 .bottle-fluid{
     height: 250px;
+}
+.small-bottle-fluid{
+    height: 150px;
 }

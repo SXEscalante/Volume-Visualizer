@@ -141,17 +141,17 @@ const HomePage = () => {
         break;
       case "bottle":
       case "bottles":
-        visualizationElement = Array.from(Array(visualizationCount)).map((_, index) => <Bottle key={index}/>)
+        visualizationElement = Array.from(Array(visualizationCount)).map((_, index) => <Bottle key={index} count={visualizationCount}/>)
         if(percentageVisualization != 0){
-          visualizationOfPercentage = <PartialBottle percent={percentageVisualization}/>
+          visualizationOfPercentage = <PartialBottle percent={percentageVisualization} count={visualizationCount}/>
         }
         visualizationElement.push(visualizationOfPercentage)
         break;
       case "shot glass":
       case "shot glasses":
-        visualizationElement = Array.from(Array(visualizationCount)).map((_, index) => <ShotGlass key={index}/>)
+        visualizationElement = Array.from(Array(visualizationCount)).map((_, index) => <ShotGlass key={index} count={visualizationCount}/>)
         if(percentageVisualization != 0){
-          visualizationOfPercentage = <PartialShotGlass percent={percentageVisualization}/>
+          visualizationOfPercentage = <PartialShotGlass percent={percentageVisualization} count={visualizationCount}/>
         }
         visualizationElement.push(visualizationOfPercentage)
         break;

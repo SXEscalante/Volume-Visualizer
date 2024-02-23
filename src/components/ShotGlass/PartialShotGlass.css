@@ -1,7 +1,14 @@
-.shot-glass{
+.partial-shot-glass{
     position: absolute;
     height: 150px;
 }
 .shot-glass-fluid{
     height: 115px;
 } 
+.small-partial-shot-glass{
+    position: absolute;
+    height: 100px;
+}
+.small-shot-glass-fluid{
+    height: 75px;
+}
