@@ -1,0 +1,17 @@
+.bucket{
+    height: 200px;
+}
+.partial-bucket{
+    position: absolute;
+    height: 200px;
+}
+.small-partial-bucket{
+    position: absolute;
+    height: 150px;
+}
+.bucket-fluid{
+    height: 200px;
+}
+.small-bucket-fluid{
+    height: 150px;
+}

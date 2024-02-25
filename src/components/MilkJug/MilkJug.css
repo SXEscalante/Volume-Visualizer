@@ -1,0 +1,17 @@
+.milk-jug{
+    height: 250px;
+}
+.partial-milk-jug{
+    position: absolute;
+    height: 250px;
+}
+.small-partial-bottle{
+    position: absolute;
+    height: 150px;
+}
+.milk-jug-fluid{
+    height: 250px;
+}
+.small-bottle-fluid{
+    height: 150px;
+}

@@ -9,6 +9,10 @@ import ShotGlass from "../../components/ShotGlass/ShotGlass";
 import Bathtub from "../../components/Bathtub/Bathtub";
 import PartialShotGlass from "../../components/ShotGlass/PartialShotGlass";
 import PartialBottle from "../../components/Bottle/PartialBottle";
+import Bucket from "../../components/Bucket/Bucket";
+import MilkJug from "../../components/MilkJug/MilkJug";
+import PartialMilkJug from "../../components/MilkJug/PartialMilkJug";
+import PartialBucket from "../../components/Bucket/PartialBucket";
 
 const HomePage = () => {
   const [user, token] = useAuth();
@@ -55,7 +59,9 @@ const HomePage = () => {
     var percentLeftover = 0
     const shotGlassVolume = 45
     const bottleVolume = 500
-    const tubVolume = 303000
+    const milkJugVolume = 3785
+    const bucketVolume = 18900
+    const tubVolume = 302800
     
     if(outputMetric == "default"){
 
@@ -65,8 +71,34 @@ const HomePage = () => {
         setVisualizationCount(roundedVolume)
         setOutputVolumeTitle("bathtubs")
       }
+      else if (standardizedVolume === bucketVolume) {
+        convertedVolume = (standardizedVolume/bucketVolume)
+        roundedVolume = Math.trunc(convertedVolume)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("bucket")
+      }
+      else if (standardizedVolume > bucketVolume){
+        convertedVolume = Math.round((standardizedVolume/bucketVolume)*100)/100
+        roundedVolume = Math.trunc(convertedVolume)
+        percentLeftover = Math.round((convertedVolume-roundedVolume)*100)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("buckets")
+      }
+      else if (standardizedVolume === milkJugVolume) {
+        convertedVolume = (standardizedVolume/milkJugVolume)
+        roundedVolume = Math.trunc(convertedVolume)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("milk jug")
+      }
+      else if (standardizedVolume > milkJugVolume){
+        convertedVolume = Math.round((standardizedVolume/milkJugVolume)*100)/100
+        roundedVolume = Math.trunc(convertedVolume)
+        percentLeftover = Math.round((convertedVolume-roundedVolume)*100)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("milk jugs")
+      }
       else if(standardizedVolume == bottleVolume){
-        convertedVolume = (standardizedVolume/500)
+        convertedVolume = (standardizedVolume/bottleVolume)
         roundedVolume = Math.trunc(convertedVolume)
         setVisualizationCount(roundedVolume)
         setOutputVolumeTitle("bottle")
@@ -120,6 +152,36 @@ const HomePage = () => {
         setOutputVolumeTitle("bottles")
       }
     }
+    else if (outputMetric == 'milkJugs') {
+      if (standardizedVolume === milkJugVolume) {
+        convertedVolume = (standardizedVolume/milkJugVolume)
+        roundedVolume = Math.trunc(convertedVolume)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("milk jug")
+      }
+      else {
+        convertedVolume = Math.round((standardizedVolume/milkJugVolume)*100)/100
+        roundedVolume = Math.trunc(convertedVolume)
+        percentLeftover = Math.round((convertedVolume-roundedVolume)*100)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("milk jugs")
+      }
+    }
+    else if(outputMetric === 'buckets'){
+      if (standardizedVolume === bucketVolume) {
+        convertedVolume = (standardizedVolume/bucketVolume)
+        roundedVolume = Math.trunc(convertedVolume)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("bucket")
+      }
+      else {
+        convertedVolume = Math.round((standardizedVolume/bucketVolume)*100)/100
+        roundedVolume = Math.trunc(convertedVolume)
+        percentLeftover = Math.round((convertedVolume-roundedVolume)*100)
+        setVisualizationCount(roundedVolume)
+        setOutputVolumeTitle("buckets")
+      }
+    }
     else if(outputMetric == "bathtubs"){
       if(standardizedVolume >= tubVolume){
         convertedVolume = Math.round((standardizedVolume/tubVolume)*100)/100
@@ -133,11 +195,31 @@ const HomePage = () => {
   }
 
   const setVisualizationElement = () => {
+    console.log()
     let visualizationElement = []
     let visualizationOfPercentage
     switch(outputVolumeTitle){
       case "bathtubs":
         visualizationElement = Array.from(Array(visualizationCount)).map((_, index) => <Bathtub key={index}/>)
+        break;
+      
+      case "bucket":
+      case "buckets":
+        console.log(percentageVisualization)
+        visualizationElement = Array.from(Array(visualizationCount)).map((_, index) => <Bucket key={index} count={visualizationCount}/>)
+        if(percentageVisualization != 0){
+          visualizationOfPercentage = <PartialBucket percent={percentageVisualization} count={visualizationCount}/>
+        }
+        visualizationElement.push(visualizationOfPercentage)
+        break;
+      case "milk jug":
+      case "milk jugs":
+        console.log(percentageVisualization)
+        visualizationElement = Array.from(Array(visualizationCount)).map((_, index) => <MilkJug key={index} count={visualizationCount}/>)
+        if(percentageVisualization != 0){
+          visualizationOfPercentage = <PartialMilkJug percent={percentageVisualization} count={visualizationCount}/>
+        }
+        visualizationElement.push(visualizationOfPercentage)
         break;
       case "bottle":
       case "bottles":
@@ -187,12 +269,15 @@ const HomePage = () => {
             </select>
           </div>
         <p>{outputVolume || 0} {outputVolumeTitle}</p>
-        <select className="outputs-metric" name="volume" id="volume" onChange={(e) => setOutputMetric(e.target.value)}>
+        <select className="outputs-metric" name="volume" id="volume" onChange={(e) => {
+          setOutputMetric(e.target.value)}}>
               <option value="default">Default</option>
-              <option value="shotGlasses">Shot Glasses</option>
-              <option value="waterBottles">Water Bottles</option>
-              <option value="bathtubs">Bathtubs</option>
-            </select>
+              <option value="shotGlasses">Shot Glasses (1.5oz/45ml)</option>
+              <option value="waterBottles">Water Bottles (16oz/500ml)</option>
+              <option value="milkJugs">Milk Jugs (1 gallon/4 liters)</option>
+              <option value="buckets">Buckets (5 gallons / 20 liters)</option>
+              <option value="bathtubs">Bathtubs (80 gallons / 320 liters)</option>
+        </select>
       </div>
       <div className="visualization-container">
         {visualization}
