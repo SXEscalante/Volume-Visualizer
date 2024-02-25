@@ -6,6 +6,9 @@
 .input-metric{
     width: 55px;
 }
+.output-metric{
+    max-width: fit-content;
+}
 .visualization-container{
     display: flex;
     justify-content: center;
